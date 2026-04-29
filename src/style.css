@@ -137,7 +137,7 @@ body {
 .dashboard-header {
   background: var(--primary);
   color: white;
-  padding: 2rem 5%;
+  padding: 3rem 5% 5rem;
   position: relative;
   overflow: hidden;
 }
@@ -147,7 +147,7 @@ body {
   z-index: 1;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .header-titles h1 {
@@ -209,8 +209,10 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  padding: 2rem 5%;
-  margin-top: -2rem;
+  padding: 0 5%;
+  margin-top: -3rem;
+  position: relative;
+  z-index: 2;
 }
 
 .stat-card {
