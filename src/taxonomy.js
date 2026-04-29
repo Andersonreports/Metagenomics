@@ -98,9 +98,17 @@ function parseCSV(csv) {
     }
 
     // Transform Google Drive links to direct preview/view links if possible
-    let finalLink = reportLink && reportLink.startsWith('http') ? reportLink : '#';
-    if (finalLink.includes('drive.google.com/file/d/')) {
-      const driveId = finalLink.split('/d/')[1]?.split('/')[0];
+    let finalLink = reportLink && reportLink.startsWith('http') ? reportLink.trim() : '#';
+    if (finalLink.includes('drive.google.com')) {
+      let driveId = '';
+      if (finalLink.includes('/file/d/')) {
+        driveId = finalLink.split('/file/d/')[1]?.split('/')[0]?.split('?')[0];
+      } else if (finalLink.includes('?id=')) {
+        driveId = finalLink.split('?id=')[1]?.split('&')[0];
+      } else if (finalLink.includes('&id=')) {
+        driveId = finalLink.split('&id=')[1]?.split('&')[0];
+      }
+      
       if (driveId) {
         finalLink = `https://drive.google.com/uc?export=view&id=${driveId}`;
       }
