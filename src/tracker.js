@@ -17,7 +17,7 @@ const CONFIGS = {
     sheetUrl: 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/export?format=csv&gid=1722659570',
     title: 'Taxonomy Projects',
     mapping: (cols) => {
-      const reportReleasedDate = cols[8];
+      const reportReleasedDate = cols[9];
       const rawDataDate = cols[7];
       let status = 'WAITING';
       if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
@@ -30,7 +30,7 @@ const CONFIGS = {
         status: status,
         type: cols[6] || cols[2] || 'Taxonomy',
         note: cols[2] ? `Type: ${cols[2]}` : '',
-        link: cols[9] || '#'
+        link: cols[10] || '#'
       };
     }
   }
