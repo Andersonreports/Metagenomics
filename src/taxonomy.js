@@ -98,7 +98,9 @@ function parseCSV(csv) {
     }
 
     // Transform Google Drive links to direct preview/view links if possible
-    let finalLink = reportLink && reportLink.startsWith('http') ? reportLink.trim() : '#';
+    const rawLink = (reportLink || '').trim();
+    let finalLink = rawLink.startsWith('http') ? rawLink : '#';
+    
     if (finalLink.includes('drive.google.com')) {
       let driveId = '';
       if (finalLink.includes('/file/d/')) {
@@ -121,7 +123,8 @@ function parseCSV(csv) {
       status: status,
       type: category || sampleType || 'N/A',
       note: sampleType ? `Type: ${sampleType}` : '',
-      link: finalLink
+      link: finalLink,
+      hasLink: finalLink !== '#'
     });
   }
   return result;
@@ -132,7 +135,8 @@ function updateUI() {
   const filteredProjects = projects.filter(p => {
     const matchesStatus = currentFilter === 'all' || p.status.toLowerCase() === currentFilter;
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.pi.toLowerCase().includes(searchQuery.toLowerCase());
+                          p.pi.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.id.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -171,7 +175,10 @@ function updateUI() {
 
       ${p.note ? `<p class="project-note">${p.note}</p>` : ''}
       
-      <a href="${p.link}" class="btn-results" target="_blank">View Results</a>
+      ${p.hasLink 
+        ? `<a href="${p.link}" class="btn-results" target="_blank">View Results</a>`
+        : `<button class="btn-results disabled" disabled title="Report not yet available">Awaiting Report</button>`
+      }
     </article>
   `).join('');
 }

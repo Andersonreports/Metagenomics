@@ -440,6 +440,13 @@ body {
   background: var(--primary-light);
 }
 
+.btn-results.disabled {
+  background: #e2e8e0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  border: 1px solid #cbd5e1;
+}
+
 @keyframes fadeInDown {
   from {
     opacity: 0;
