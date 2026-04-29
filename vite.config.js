@@ -6,7 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        taxonomy: 'taxonomy.html',
+        tracker: 'tracker.html',
       },
     },
   },

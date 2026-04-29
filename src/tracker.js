@@ -1,19 +1,62 @@
-// Mock data for initial demonstration
-const MOCK_DATA = [
-  { id: "#1", name: "Soil Metagenomics (Rashmi_1)", pi: "Dr.RASHMI DESAI - Dyanand sagar university", status: "COMPLETED", type: "WGS", note: "Analysis complete - report submitted", link: "#" },
-  { id: "#2", name: "Soil Metagenomics (Rashmi_2)", pi: "Dr.RASHMI DESAI - Dyanand sagar university", status: "COMPLETED", type: "WGS", note: "Analysis complete - report submitted", link: "#" },
-  { id: "#3", name: "Soil Metagenomics (Rashmi_3)", pi: "Dr.RASHMI DESAI - Dyanand sagar university", status: "COMPLETED", type: "WGS", note: "Analysis complete - report submitted", link: "#" },
-  { id: "#4", name: "Ocean Microbiome Study", pi: "Dr. Arvind - IIT Madras", status: "IN PROGRESS", type: "Taxonomy", note: "Sequencing in progress", link: "#" },
-  { id: "#5", name: "Human Gut Flora Analysis", pi: "Dr. Smith - AIIMS", status: "WAITING", type: "Taxonomy", note: "Awaiting sample arrival", link: "#" },
-  { id: "#6", name: "Plant Endophyte Survey", pi: "Dr. Meena - TNAU", status: "QC", type: "WGS", note: "Quality control check", link: "#" },
-];
+// Configurations for different tracker types
+const CONFIGS = {
+  wgs: {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQtE3_1ciBKS42QnfzYvoHdexXLD_NHqkUp_j2mYFsk1ZcB_WbGY2rd6IZiHEtE3n_Oi4KhLw8748DA/pub?gid=0&single=true&output=csv',
+    title: 'WGS Projects',
+    mapping: (cols) => ({
+      id: `#${cols[0]}`,
+      name: cols[1],
+      status: cols[2]?.toUpperCase() || 'WAITING',
+      pi: cols[3] || 'N/A',
+      type: cols[4] || 'WGS',
+      note: cols[5] || '',
+      link: cols[6] || '#'
+    })
+  },
+  taxonomy: {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/export?format=csv&gid=1722659570',
+    title: 'Taxonomy Projects',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[8];
+      const rawDataDate = cols[7];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
 
-// Configuration
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/export?format=csv&gid=1722659570'; 
+      return {
+        id: cols[4] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[5] || 'N/A',
+        status: status,
+        type: cols[6] || cols[2] || 'Taxonomy',
+        note: cols[2] ? `Type: ${cols[2]}` : '',
+        link: cols[9] || '#'
+      };
+    }
+  }
+};
 
+// State
 let projects = [];
 let currentFilter = 'all';
 let searchQuery = '';
+let currentType = 'taxonomy'; // Default
+
+// Initialize
+async function init() {
+  const urlParams = new URLSearchParams(window.location.search);
+  currentType = urlParams.get('type') || 'taxonomy';
+  
+  if (!CONFIGS[currentType]) {
+    console.error(`Invalid tracker type: ${currentType}`);
+    currentType = 'taxonomy';
+  }
+
+  document.title = `${CONFIGS[currentType].title} - Anderson Labs`;
+  document.querySelector('.header-titles h1').textContent = CONFIGS[currentType].title;
+
+  await fetchData();
+}
 
 async function fetchData() {
   const syncStatus = document.getElementById('sync-status');
@@ -21,7 +64,7 @@ async function fetchData() {
   syncStatus.classList.add('syncing');
 
   try {
-    const response = await fetch(SHEET_URL);
+    const response = await fetch(CONFIGS[currentType].sheetUrl);
     if (!response.ok) throw new Error('Network response was not ok');
     const csvText = await response.text();
     projects = parseCSV(csvText);
@@ -32,22 +75,21 @@ async function fetchData() {
     }, 2000);
   } catch (error) {
     console.error("Error fetching data:", error);
-    projects = MOCK_DATA;
-    updateUI();
     syncStatus.textContent = 'Sync Error';
     syncStatus.classList.remove('syncing');
   }
 }
 
 function parseCSV(csv) {
-  // Split lines but handle potential quoted newlines
   const lines = csv.split(/\r?\n/);
   const result = [];
+  const config = CONFIGS[currentType];
   
-  // Find the header row (S.NO is the first column)
+  // Dynamic header detection
   let headerIndex = -1;
+  const headerMarker = currentType === 'wgs' ? 'ID' : 'S.NO';
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith('S.NO')) {
+    if (lines[i].trim().startsWith(headerMarker)) {
       headerIndex = i;
       break;
     }
@@ -55,7 +97,6 @@ function parseCSV(csv) {
 
   if (headerIndex === -1) return [];
 
-  // Helper to split CSV line while respecting quotes
   const splitLine = (line) => {
     const parts = [];
     let current = '';
@@ -77,55 +118,21 @@ function parseCSV(csv) {
     const line = lines[i].trim();
     if (!line || line.startsWith(',,,,')) continue;
     
-    const cols = splitLine(line);
-    if (cols.length < 10) continue;
+    const cols = splitLine(line).map(c => c.trim().replace(/^"|"$/g, ''));
+    const p = config.mapping(cols);
 
-    const sampleName = cols[1];
-    const sampleType = cols[2];
-    const andersonId = cols[4];
-    const billedFor = cols[5];
-    const category = cols[6];
-    const rawDataDate = cols[7];
-    const reportReleasedDate = cols[8];
-    const reportLink = cols[9];
-
-    // Status logic
-    let status = 'WAITING';
-    if (reportReleasedDate && reportReleasedDate.trim()) {
-      status = 'COMPLETED';
-    } else if (rawDataDate && rawDataDate.trim()) {
-      status = 'IN PROGRESS';
-    }
-
-    // Transform Google Drive links to direct preview/view links if possible
-    const rawLink = (reportLink || '').trim();
-    let finalLink = rawLink.startsWith('http') ? rawLink : '#';
-    
+    // Transform Drive links
+    let finalLink = p.link.startsWith('http') ? p.link : '#';
     if (finalLink.includes('drive.google.com')) {
       let driveId = '';
-      if (finalLink.includes('/file/d/')) {
-        driveId = finalLink.split('/file/d/')[1]?.split('/')[0]?.split('?')[0];
-      } else if (finalLink.includes('?id=')) {
-        driveId = finalLink.split('?id=')[1]?.split('&')[0];
-      } else if (finalLink.includes('&id=')) {
-        driveId = finalLink.split('&id=')[1]?.split('&')[0];
-      }
+      if (finalLink.includes('/file/d/')) driveId = finalLink.split('/file/d/')[1]?.split('/')[0]?.split('?')[0];
+      else if (finalLink.includes('?id=')) driveId = finalLink.split('?id=')[1]?.split('&')[0];
+      else if (finalLink.includes('&id=')) driveId = finalLink.split('&id=')[1]?.split('&')[0];
       
-      if (driveId) {
-        finalLink = `https://drive.google.com/file/d/${driveId}/preview`;
-      }
+      if (driveId) finalLink = `https://drive.google.com/file/d/${driveId}/preview`;
     }
 
-    result.push({
-      id: andersonId || `#${cols[0]}`,
-      name: sampleName || 'Unnamed Sample',
-      pi: billedFor || 'N/A',
-      status: status,
-      type: category || sampleType || 'N/A',
-      note: sampleType ? `Type: ${sampleType}` : '',
-      link: finalLink,
-      hasLink: finalLink !== '#'
-    });
+    result.push({ ...p, link: finalLink, hasLink: finalLink !== '#' });
   }
   return result;
 }
@@ -140,17 +147,14 @@ function updateUI() {
     return matchesStatus && matchesSearch;
   });
 
-  // Update Stats
   document.getElementById('stat-total').textContent = projects.length;
   document.getElementById('stat-completed').textContent = projects.filter(p => p.status === 'COMPLETED').length;
   document.getElementById('stat-active').textContent = projects.filter(p => p.status === 'IN PROGRESS' || p.status === 'QC').length;
-  document.getElementById('stat-waiting').textContent = projects.filter(p => p.status === 'WAITING').length;
+  document.getElementById('stat-waiting').textContent = projects.filter(p => p.status === 'WAITING' || p.status === 'ON HOLD').length;
 
-  // Update Timestamp
   const now = new Date();
   document.getElementById('last-loaded').textContent = `Last loaded: ${now.toLocaleDateString()}, ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 
-  // Render Grid
   if (filteredProjects.length === 0) {
     grid.innerHTML = '<div class="no-results">No projects found matching your criteria.</div>';
     return;
@@ -183,7 +187,7 @@ function updateUI() {
   `).join('');
 }
 
-// Event Listeners
+// Listeners
 document.getElementById('project-search').addEventListener('input', (e) => {
   searchQuery = e.target.value;
   updateUI();
@@ -198,8 +202,6 @@ document.getElementById('status-filters').addEventListener('click', (e) => {
   }
 });
 
-// Initial Load
-fetchData();
-
-// Auto-refresh every 30 seconds
+// Start
+init();
 setInterval(fetchData, 30000);
