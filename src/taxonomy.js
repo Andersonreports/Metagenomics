@@ -16,18 +16,26 @@ let currentFilter = 'all';
 let searchQuery = '';
 
 async function fetchData() {
-  const grid = document.getElementById('project-grid');
+  const syncStatus = document.getElementById('sync-status');
+  syncStatus.textContent = 'Syncing...';
+  syncStatus.classList.add('syncing');
+
   try {
     const response = await fetch(SHEET_URL);
     if (!response.ok) throw new Error('Network response was not ok');
     const csvText = await response.text();
     projects = parseCSV(csvText);
     updateUI();
+    setTimeout(() => {
+      syncStatus.textContent = '';
+      syncStatus.classList.remove('syncing');
+    }, 2000);
   } catch (error) {
     console.error("Error fetching data:", error);
-    // If fetch fails, we show mock data so the UI isn't empty during dev
     projects = MOCK_DATA;
     updateUI();
+    syncStatus.textContent = 'Sync Error';
+    syncStatus.classList.remove('syncing');
   }
 }
 
@@ -169,5 +177,5 @@ document.getElementById('status-filters').addEventListener('click', (e) => {
 // Initial Load
 fetchData();
 
-// Auto-refresh every 5 minutes
-setInterval(fetchData, 300000);
+// Auto-refresh every 30 seconds
+setInterval(fetchData, 30000);
