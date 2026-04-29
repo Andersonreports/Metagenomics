@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taxonomy Projects - Anderson Labs</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="header-titles">
+          <h1>Metagenomics Projects</h1>
+          <p>Anderson Diagnostics & Labs · Bioinformatics Division</p>
+        </div>
+        <div class="last-loaded" id="last-loaded">Last loaded: --/--/----, --:--</div>
+      </div>
+    </header>
+
+    <section class="stats-container" id="stats-container">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-completed">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-active">0</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-waiting">0</div>
+        <div class="stat-label">Waiting</div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="filters" id="status-filters">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="in progress">In Progress</button>
+        <button class="filter-btn" data-status="qc">QC</button>
+        <button class="filter-btn" data-status="waiting">Waiting</button>
+        <button class="filter-btn" data-status="completed">Completed</button>
+        <button class="filter-btn" data-status="on hold">On Hold</button>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="text" id="project-search" class="search-input" placeholder="Search by project name, PI, client..." />
+      </div>
+    </div>
+
+    <main class="project-grid" id="project-grid">
+      <!-- Project cards will be injected here -->
+      <div class="loading-state">Loading project data...</div>
+    </main>
+
+    <script type="module" src="/src/taxonomy.js"></script>
+  </body>
+</html>
