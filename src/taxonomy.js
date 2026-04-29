@@ -97,6 +97,15 @@ function parseCSV(csv) {
       status = 'IN PROGRESS';
     }
 
+    // Transform Google Drive links to direct preview/view links if possible
+    let finalLink = reportLink && reportLink.startsWith('http') ? reportLink : '#';
+    if (finalLink.includes('drive.google.com/file/d/')) {
+      const driveId = finalLink.split('/d/')[1]?.split('/')[0];
+      if (driveId) {
+        finalLink = `https://drive.google.com/uc?export=view&id=${driveId}`;
+      }
+    }
+
     result.push({
       id: andersonId || `#${cols[0]}`,
       name: sampleName || 'Unnamed Sample',
@@ -104,7 +113,7 @@ function parseCSV(csv) {
       status: status,
       type: category || sampleType || 'N/A',
       note: sampleType ? `Type: ${sampleType}` : '',
-      link: reportLink && reportLink.startsWith('http') ? reportLink : '#'
+      link: finalLink
     });
   }
   return result;
