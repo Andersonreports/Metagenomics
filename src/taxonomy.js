@@ -110,7 +110,7 @@ function parseCSV(csv) {
       }
       
       if (driveId) {
-        finalLink = `https://drive.google.com/uc?export=view&id=${driveId}`;
+        finalLink = `https://drive.google.com/file/d/${driveId}/preview`;
       }
     }
 
