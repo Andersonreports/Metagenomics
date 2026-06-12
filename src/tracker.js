@@ -14,23 +14,23 @@ const CONFIGS = {
     })
   },
   taxonomy: {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/export?format=csv&gid=1722659570',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1291795325',
     title: 'Taxonomy Projects',
     mapping: (cols) => {
-      const reportReleasedDate = cols[9];
-      const rawDataDate = cols[7];
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
       let status = 'WAITING';
       if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
       else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
 
       return {
-        id: cols[4] || `#${cols[0]}`,
+        id: cols[5] || cols[3] || `#${cols[0]}`,
         name: cols[1] || 'Unnamed Sample',
-        pi: cols[5] || 'N/A',
+        pi: cols[9] || 'N/A',
         status: status,
-        type: cols[6] || cols[2] || 'Taxonomy',
-        note: cols[2] ? `Type: ${cols[2]}` : '',
-        link: cols[10] || '#'
+        type: cols[7] || 'Taxonomy',
+        note: cols[6] ? `Package: ${cols[6]}` : '',
+        link: '#'
       };
     }
   }
