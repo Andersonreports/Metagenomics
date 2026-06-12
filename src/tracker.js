@@ -16,6 +16,7 @@ const CONFIGS = {
   taxonomy: {
     sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1291795325',
     title: 'Taxonomy Projects',
+    backLink: './index.html',
     mapping: (cols) => {
       const reportReleasedDate = cols[15];
       const rawDataDate = cols[11];
@@ -30,6 +31,135 @@ const CONFIGS = {
         status: status,
         type: cols[7] || 'Taxonomy',
         note: cols[6] ? `Package: ${cols[6]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'gut-microbiome': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=144619428',
+    title: 'Gut Microbiome Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[5] || cols[3] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[10] || 'N/A',
+        status: status,
+        type: cols[7] || 'Gut Microbiome',
+        note: cols[8] ? `Sample: ${cols[8]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'human-samples': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=0',
+    title: 'Human Samples Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[4] || cols[2] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[10] || 'N/A',
+        status: status,
+        type: cols[6] || 'Human Samples',
+        note: cols[7] ? `Sample: ${cols[7]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'fungus-samples': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=78733138',
+    title: 'Fungus Samples Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[4] || cols[2] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[10] || 'N/A',
+        status: status,
+        type: cols[6] || 'Fungus Samples',
+        note: cols[7] ? `Sample: ${cols[7]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'virus-samples': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=288137101',
+    title: 'Virus Samples Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[16];
+      const rawDataDate = cols[12];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[5] || cols[3] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[11] || 'N/A',
+        status: status,
+        type: cols[7] || 'Virus Samples',
+        note: cols[2] ? `Run: ${cols[2]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'environment-samples': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1033738536',
+    title: 'Environment Samples Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[13];
+      const rawDataDate = cols[9];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[4] || cols[2] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: 'N/A',
+        status: status,
+        type: cols[5] || 'Environment Samples',
+        note: cols[6] ? `Sample: ${cols[6]}` : '',
+        link: '#'
+      };
+    }
+  },
+  'inhouse-kapa': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1070221126',
+    title: 'Inhouse Roche KAPA RUN Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const result = cols[9] || '';
+      const status = (result.trim() && result.trim().toUpperCase() !== 'NOT ANALYSED') ? 'COMPLETED' : 'IN PROGRESS';
+
+      return {
+        id: `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: 'N/A',
+        status: status,
+        type: cols[3] || 'Inhouse Roche KAPA RUN',
+        note: cols[2] ? `Sample: ${cols[2]}` : '',
         link: '#'
       };
     }
@@ -54,6 +184,11 @@ async function init() {
 
   document.title = `${CONFIGS[currentType].title} - Anderson Labs`;
   document.querySelector('.header-titles h1').textContent = CONFIGS[currentType].title;
+
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn && CONFIGS[currentType].backLink) {
+    backBtn.href = CONFIGS[currentType].backLink;
+  }
 
   await fetchData();
 }
