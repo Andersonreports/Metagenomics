@@ -14,24 +14,25 @@ const CONFIGS = {
     })
   },
   taxonomy: {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1291795325',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/gviz/tq?tqx=out:csv&sheet=Sheet3',
     title: 'Taxonomy Projects',
     backLink: './index.html',
+    headerMarker: 'Report link',
     mapping: (cols) => {
-      const reportReleasedDate = cols[15];
-      const rawDataDate = cols[11];
+      const reportReleasedDate = cols[9];
+      const rawDataDate = cols[7];
       let status = 'WAITING';
       if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
       else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
 
       return {
-        id: cols[5] || cols[3] || `#${cols[0]}`,
+        id: cols[4] || cols[3] || `#${cols[0]}`,
         name: cols[1] || 'Unnamed Sample',
-        pi: cols[9] || 'N/A',
+        pi: 'N/A',
         status: status,
-        type: cols[7] || 'Taxonomy',
-        note: cols[6] ? `Package: ${cols[6]}` : '',
-        link: '#'
+        type: cols[6] || 'Taxonomy',
+        note: cols[5] ? `Package: ${cols[5]}` : '',
+        link: cols[10] || '#'
       };
     }
   },
@@ -222,9 +223,12 @@ function parseCSV(csv) {
   
   // Dynamic header detection
   let headerIndex = -1;
-  const headerMarker = currentType === 'wgs' ? 'ID' : 'S.NO';
+  const headerMarker = config.headerMarker || (currentType === 'wgs' ? 'ID' : 'S.NO');
+  const matchesHeader = config.headerMarker
+    ? (line) => line.includes(headerMarker)
+    : (line) => line.trim().startsWith(headerMarker);
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim().startsWith(headerMarker)) {
+    if (matchesHeader(lines[i])) {
       headerIndex = i;
       break;
     }
