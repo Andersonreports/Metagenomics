@@ -36,8 +36,30 @@ const CONFIGS = {
       };
     }
   },
+  'endometrial-samples': {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=0',
+    title: 'Endometrial Samples Projects',
+    backLink: './wgs.html',
+    mapping: (cols) => {
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
+      let status = 'WAITING';
+      if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
+      else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
+
+      return {
+        id: cols[5] || cols[3] || `#${cols[0]}`,
+        name: cols[1] || 'Unnamed Sample',
+        pi: cols[9] || 'N/A',
+        status: status,
+        type: cols[7] || 'Endometrial Samples',
+        note: cols[8] ? `Sample: ${cols[8]}` : '',
+        link: cols[16] || '#'
+      };
+    }
+  },
   'gut-microbiome': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=144619428',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=313361967',
     title: 'Gut Microbiome Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
@@ -54,12 +76,12 @@ const CONFIGS = {
         status: status,
         type: cols[7] || 'Gut Microbiome',
         note: cols[8] ? `Sample: ${cols[8]}` : '',
-        link: '#'
+        link: cols[16] || '#'
       };
     }
   },
   'human-samples': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=0',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=6309662',
     title: 'Human Samples Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
@@ -76,12 +98,12 @@ const CONFIGS = {
         status: status,
         type: cols[6] || 'Human Samples',
         note: cols[7] ? `Sample: ${cols[7]}` : '',
-        link: '#'
+        link: cols[16] || '#'
       };
     }
   },
   'fungus-samples': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=78733138',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=695788515',
     title: 'Fungus Samples Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
@@ -98,12 +120,12 @@ const CONFIGS = {
         status: status,
         type: cols[6] || 'Fungus Samples',
         note: cols[7] ? `Sample: ${cols[7]}` : '',
-        link: '#'
+        link: cols[16] || '#'
       };
     }
   },
   'virus-samples': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=288137101',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=1884530805',
     title: 'Virus Samples Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
@@ -120,12 +142,12 @@ const CONFIGS = {
         status: status,
         type: cols[7] || 'Virus Samples',
         note: cols[2] ? `Run: ${cols[2]}` : '',
-        link: '#'
+        link: cols[17] || '#'
       };
     }
   },
   'environment-samples': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1033738536',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=327784423',
     title: 'Environment Samples Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
@@ -142,12 +164,12 @@ const CONFIGS = {
         status: status,
         type: cols[5] || 'Environment Samples',
         note: cols[6] ? `Sample: ${cols[6]}` : '',
-        link: '#'
+        link: cols[14] || '#'
       };
     }
   },
   'inhouse-kapa': {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1VLY6tSRV4dThhqXc0BJQfd6EcF5NzMDR2y8DFxilrhU/export?format=csv&gid=1070221126',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=539062939',
     title: 'Inhouse Roche KAPA RUN Projects',
     backLink: './wgs.html',
     mapping: (cols) => {
