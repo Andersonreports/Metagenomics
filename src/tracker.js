@@ -14,25 +14,24 @@ const CONFIGS = {
     })
   },
   taxonomy: {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1tEv4vSQ_yVxZhH9_7YvUglKJL4S4Cx5eT8M-fO8m3Mg/gviz/tq?tqx=out:csv&sheet=Sheet3',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=0',
     title: 'Taxonomy Projects',
     backLink: './index.html',
-    headerMarker: 'Report link',
     mapping: (cols) => {
-      const reportReleasedDate = cols[9];
-      const rawDataDate = cols[7];
+      const reportReleasedDate = cols[15];
+      const rawDataDate = cols[11];
       let status = 'WAITING';
       if (reportReleasedDate && reportReleasedDate.trim()) status = 'COMPLETED';
       else if (rawDataDate && rawDataDate.trim()) status = 'IN PROGRESS';
 
       return {
-        id: cols[4] || cols[3] || `#${cols[0]}`,
+        id: cols[5] || cols[3] || `#${cols[0]}`,
         name: cols[1] || 'Unnamed Sample',
         pi: 'N/A',
         status: status,
-        type: cols[6] || 'Taxonomy',
-        note: cols[5] ? `Package: ${cols[5]}` : '',
-        link: cols[10] || '#'
+        type: cols[7] || 'Taxonomy',
+        note: cols[6] ? `Package: ${cols[6]}` : '',
+        link: cols[16] || '#'
       };
     }
   },
