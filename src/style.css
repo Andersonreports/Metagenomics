@@ -50,6 +50,22 @@ body {
   text-align: center;
   margin-bottom: 4rem;
   animation: fadeInDown 0.8s ease-out;
+  position: relative;
+}
+
+.hero .header-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hero .back-btn {
+  color: var(--primary);
+  background: rgba(10, 37, 64, 0.08);
+}
+
+.hero .back-btn:hover {
+  background: rgba(10, 37, 64, 0.15);
 }
 
 .hero h1 {
