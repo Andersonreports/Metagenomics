@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ONT Inhouse Validation - Anderson Labs</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <div class="header-top">
+        <a href="./tracker.html?type=taxonomy" class="back-btn" title="Back to Taxonomy Projects">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </div>
+      <div class="header-content">
+        <div class="header-titles">
+          <h1>ONT Inhouse Validation</h1>
+          <p>Anderson Diagnostics & Labs Bioinformatics Division</p>
+        </div>
+        <div class="header-meta">
+          <div class="last-loaded" id="last-loaded">Last loaded: --/--/----, --:--</div>
+          <div id="sync-status" class="sync-status"></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats-container">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Samples</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-matching">0</div>
+        <div class="stat-label">Matching</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-mismatching">0</div>
+        <div class="stat-label">Mismatching</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="search-wrapper">
+        <input type="text" id="ont-search" class="search-input" placeholder="Search by patient, barcode, or run..." />
+      </div>
+    </div>
+
+    <section class="ont-table-section">
+      <div class="table-wrapper">
+        <table class="ont-table">
+          <thead>
+            <tr>
+              <th>Run</th>
+              <th>Barcode</th>
+              <th>Patient</th>
+              <th>Test Billed For</th>
+              <th>Sample Type</th>
+              <th>Method</th>
+              <th>Previous Result</th>
+              <th>ONT Result (EPI2ME)</th>
+              <th>Anderson Pipeline Result</th>
+              <th>Remark</th>
+            </tr>
+          </thead>
+          <tbody id="ont-table-body">
+            <tr><td colspan="10" class="ont-no-results">Loading samples...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <script type="module" src="./src/ont-validation.js"></script>
+  </body>
+</html>

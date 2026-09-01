@@ -43,11 +43,11 @@
         <div class="stat-value" id="stat-waiting">0</div>
         <div class="stat-label">Waiting</div>
       </div>
-      <div class="stat-card clickable" id="stat-ont-card" style="display: none;" role="button" tabindex="0">
+      <a class="stat-card clickable" id="stat-ont-card" href="./ont-validation.html" style="display: none;">
         <div class="stat-value" id="stat-ont">0</div>
         <div class="stat-label">ONT Inhouse Validation</div>
         <div class="stat-hint">Click to view samples</div>
-      </div>
+      </a>
     </section>
 
     <div class="controls">
@@ -69,37 +69,6 @@
       <!-- Project cards will be injected here -->
       <div class="loading-state">Loading project data...</div>
     </main>
-
-    <div class="modal-overlay" id="ont-modal-overlay">
-      <div class="modal-box">
-        <div class="modal-header">
-          <h2>ONT Inhouse Validation Samples</h2>
-          <button class="modal-close" id="ont-modal-close" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="table-wrapper">
-            <table class="ont-table">
-              <thead>
-                <tr>
-                  <th>Run</th>
-                  <th>Barcode</th>
-                  <th>Patient</th>
-                  <th>Test Billed For</th>
-                  <th>Sample Type</th>
-                  <th>Method</th>
-                  <th>Previous Result</th>
-                  <th>ONT Result (EPI2ME)</th>
-                  <th>Anderson Pipeline Result</th>
-                  <th>Remark</th>
-                </tr>
-              </thead>
-              <tbody id="ont-table-body">
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script type="module" src="./src/tracker.js"></script>
   </body>
