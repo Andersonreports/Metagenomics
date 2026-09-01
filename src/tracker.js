@@ -188,6 +188,8 @@ const CONFIGS = {
   }
 };
 
+const ONT_VALIDATION_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1kb2ShLux391fKUXQOEd3pQOJ5LY2DUbQXv3uKof4Euk/export?format=csv&gid=287746018';
+
 // State
 let projects = [];
 let currentFilter = 'all';
@@ -212,7 +214,22 @@ async function init() {
     backBtn.href = CONFIGS[currentType].backLink;
   }
 
+  const ontCard = document.getElementById('stat-ont-card');
+  if (ontCard) ontCard.style.display = currentType === 'taxonomy' ? '' : 'none';
+
   await fetchData();
+}
+
+async function fetchOntValidationCount() {
+  try {
+    const response = await fetch(ONT_VALIDATION_SHEET_URL);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const csvText = await response.text();
+    const sampleRows = csvText.match(/^\s*\d+\s*,/gm) || [];
+    document.getElementById('stat-ont').textContent = sampleRows.length;
+  } catch (error) {
+    console.error('Error fetching ONT validation count:', error);
+  }
 }
 
 async function fetchData() {
@@ -226,6 +243,7 @@ async function fetchData() {
     const csvText = await response.text();
     projects = parseCSV(csvText);
     updateUI();
+    if (currentType === 'taxonomy') await fetchOntValidationCount();
     setTimeout(() => {
       syncStatus.textContent = '';
       syncStatus.classList.remove('syncing');
