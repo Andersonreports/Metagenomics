@@ -51,28 +51,8 @@
       </div>
     </div>
 
-    <section class="ont-table-section">
-      <div class="table-wrapper">
-        <table class="ont-table">
-          <thead>
-            <tr>
-              <th>Run</th>
-              <th>Barcode</th>
-              <th>Patient</th>
-              <th>Test Billed For</th>
-              <th>Sample Type</th>
-              <th>Method</th>
-              <th>Previous Result</th>
-              <th>ONT Result (EPI2ME)</th>
-              <th>Anderson Pipeline Result</th>
-              <th>Remark</th>
-            </tr>
-          </thead>
-          <tbody id="ont-table-body">
-            <tr><td colspan="10" class="ont-no-results">Loading samples...</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <section class="ont-table-section" id="ont-groups">
+      <div class="ont-no-results">Loading samples...</div>
     </section>
 
     <script type="module" src="./src/ont-validation.js"></script>

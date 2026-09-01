@@ -309,6 +309,21 @@ body {
   padding: 1rem 5% 3rem;
 }
 
+.ont-run-group {
+  margin-bottom: 2.5rem;
+}
+
+.ont-run-group:last-child {
+  margin-bottom: 0;
+}
+
+.ont-run-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
 .table-wrapper {
   background: var(--card-bg);
   border-radius: 16px;
