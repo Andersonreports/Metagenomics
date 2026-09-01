@@ -346,16 +346,19 @@ body {
   text-align: left;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
+}
+
+.ont-table td {
   overflow-wrap: break-word;
 }
 
-.ont-table th:nth-child(1), .ont-table td:nth-child(1) { width: 6%; }
+.ont-table th:nth-child(1), .ont-table td:nth-child(1) { width: 8%; }
 .ont-table th:nth-child(2), .ont-table td:nth-child(2) { width: 10%; }
 .ont-table th:nth-child(3), .ont-table td:nth-child(3) { width: 9%; }
 .ont-table th:nth-child(4), .ont-table td:nth-child(4) { width: 9%; }
 .ont-table th:nth-child(5), .ont-table td:nth-child(5) { width: 8%; }
-.ont-table th:nth-child(6), .ont-table td:nth-child(6) { width: 15%; }
-.ont-table th:nth-child(7), .ont-table td:nth-child(7) { width: 15%; }
+.ont-table th:nth-child(6), .ont-table td:nth-child(6) { width: 14%; }
+.ont-table th:nth-child(7), .ont-table td:nth-child(7) { width: 14%; }
 .ont-table th:nth-child(8), .ont-table td:nth-child(8) { width: 15%; }
 .ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 13%; }
 
@@ -366,6 +369,9 @@ body {
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
+  white-space: nowrap;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .ont-table tbody tr:last-child td {
