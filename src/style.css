@@ -364,6 +364,15 @@ body {
 .ont-table th:nth-child(8), .ont-table td:nth-child(8) { width: 15%; }
 .ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 13%; }
 
+.ont-table th:nth-child(-n+5),
+.ont-table td:nth-child(-n+5) {
+  text-align: center;
+}
+
+.ont-table td:nth-child(-n+5) {
+  vertical-align: middle;
+}
+
 .ont-table th {
   background: var(--primary);
   color: white;
