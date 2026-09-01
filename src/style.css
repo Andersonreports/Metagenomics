@@ -350,6 +350,8 @@ body {
 
 .ont-table td {
   overflow-wrap: break-word;
+  text-align: justify;
+  text-align-last: left;
 }
 
 .ont-table th:nth-child(1), .ont-table td:nth-child(1) { width: 8%; }
