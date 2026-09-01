@@ -49,7 +49,7 @@ export function parseOntValidationRecords(csvText) {
     if (!row.some(c => c && c.trim())) continue;
 
     if (norm(row[0]).includes('ont validation')) {
-      currentRun = row[0].trim();
+      currentRun = row[0].trim().replace(/^ont validation\s*/i, '').trim();
       colMap = null;
       continue;
     }
