@@ -195,6 +195,7 @@ let projects = [];
 let currentFilter = 'all';
 let searchQuery = '';
 let currentType = 'taxonomy'; // Default
+let ontRecords = [];
 
 // Initialize
 async function init() {
@@ -220,16 +221,158 @@ async function init() {
   await fetchData();
 }
 
-async function fetchOntValidationCount() {
+// Parses raw CSV text into rows of fields, respecting quoted fields that
+// contain commas or embedded newlines (the ONT validation sheet has both).
+function parseCsvRows(text) {
+  const rows = [];
+  let row = [];
+  let cur = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') { cur += '"'; i++; }
+        else inQuotes = false;
+      } else {
+        cur += ch;
+      }
+      continue;
+    }
+    if (ch === '"') { inQuotes = true; continue; }
+    if (ch === ',') { row.push(cur); cur = ''; continue; }
+    if (ch === '\r') continue;
+    if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; continue; }
+    cur += ch;
+  }
+  if (cur.length || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+
+// The sheet has multiple "ONT VALIDATION RUN-N" sections stacked vertically,
+// each with its own header row whose columns shift slightly between runs.
+function parseOntValidationRecords(csvText) {
+  const rows = parseCsvRows(csvText);
+  const records = [];
+  let colMap = null;
+  let currentRun = '';
+
+  for (const row of rows) {
+    if (!row.some(c => c && c.trim())) continue;
+
+    if (norm(row[0]).includes('ont validation')) {
+      currentRun = row[0].trim();
+      colMap = null;
+      continue;
+    }
+
+    if (norm(row[0]) === 'barcode') {
+      colMap = {};
+      row.forEach((h, idx) => {
+        const hn = norm(h);
+        if (!hn) return;
+        if (hn.includes('barcode')) colMap.barcode = idx;
+        else if (hn.includes('patient')) colMap.patientName = idx;
+        else if (hn.includes('billed')) colMap.billedFor = idx;
+        else if (hn.includes('sample type')) colMap.sampleType = idx;
+        else if (hn.includes('method')) colMap.method = idx;
+        else if (hn.includes('previous')) colMap.previousResult = idx;
+        else if (hn.includes('epi2me') || hn.includes('ont result')) colMap.ontResult = idx;
+        else if (hn.includes('advat') || hn.includes('pipeline')) colMap.pipelineResult = idx;
+        else if (hn.includes('remark')) colMap.remark = idx;
+      });
+      continue;
+    }
+
+    if (colMap && /^\d+$/.test((row[colMap.barcode] || '').trim())) {
+      const get = (key) => colMap[key] !== undefined ? (row[colMap[key]] || '').trim() : '';
+      records.push({
+        run: currentRun,
+        barcode: get('barcode'),
+        patientName: get('patientName'),
+        billedFor: get('billedFor'),
+        sampleType: get('sampleType'),
+        method: get('method'),
+        previousResult: get('previousResult'),
+        ontResult: get('ontResult'),
+        pipelineResult: get('pipelineResult'),
+        remark: get('remark')
+      });
+    }
+  }
+
+  return records;
+}
+
+function classifyRemark(remark) {
+  const r = norm(remark);
+  if (r.includes('mismatch')) return { label: 'Mismatching', cls: 'remark-mismatching' };
+  if (r.includes('pending')) return { label: 'Pending', cls: 'remark-pending' };
+  if (r.includes('matching')) return { label: 'Matching', cls: 'remark-matching' };
+  return { label: remark ? 'Remark' : 'N/A', cls: 'remark-default' };
+}
+
+function norm(s) {
+  return (s || '').trim().toLowerCase();
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+function renderOntTable() {
+  const tbody = document.getElementById('ont-table-body');
+  if (!tbody) return;
+
+  if (ontRecords.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="ont-no-results">No validation samples found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = ontRecords.map(r => {
+    const { label, cls } = classifyRemark(r.remark);
+    return `
+      <tr>
+        <td>${escapeHtml(r.run)}</td>
+        <td>${escapeHtml(r.barcode)}</td>
+        <td>${escapeHtml(r.patientName)}</td>
+        <td>${escapeHtml(r.billedFor) || '—'}</td>
+        <td>${escapeHtml(r.sampleType) || '—'}</td>
+        <td>${escapeHtml(r.method) || '—'}</td>
+        <td>${escapeHtml(r.previousResult) || '—'}</td>
+        <td>${escapeHtml(r.ontResult) || '—'}</td>
+        <td>${escapeHtml(r.pipelineResult) || '—'}</td>
+        <td>
+          <span class="remark-tag ${cls}">${escapeHtml(label)}</span>
+          ${r.remark ? `<div class="remark-detail">${escapeHtml(r.remark)}</div>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function fetchOntValidationData() {
   try {
     const response = await fetch(ONT_VALIDATION_SHEET_URL);
     if (!response.ok) throw new Error('Network response was not ok');
     const csvText = await response.text();
-    const sampleRows = csvText.match(/^\s*\d+\s*,/gm) || [];
-    document.getElementById('stat-ont').textContent = sampleRows.length;
+    ontRecords = parseOntValidationRecords(csvText);
+    document.getElementById('stat-ont').textContent = ontRecords.length;
+    renderOntTable();
   } catch (error) {
-    console.error('Error fetching ONT validation count:', error);
+    console.error('Error fetching ONT validation data:', error);
   }
+}
+
+function openOntModal() {
+  document.getElementById('ont-modal-overlay')?.classList.add('active');
+}
+
+function closeOntModal() {
+  document.getElementById('ont-modal-overlay')?.classList.remove('active');
 }
 
 async function fetchData() {
@@ -243,7 +386,7 @@ async function fetchData() {
     const csvText = await response.text();
     projects = parseCSV(csvText);
     updateUI();
-    if (currentType === 'taxonomy') await fetchOntValidationCount();
+    if (currentType === 'taxonomy') await fetchOntValidationData();
     setTimeout(() => {
       syncStatus.textContent = '';
       syncStatus.classList.remove('syncing');
@@ -378,6 +521,18 @@ document.getElementById('status-filters').addEventListener('click', (e) => {
     currentFilter = e.target.dataset.status;
     updateUI();
   }
+});
+
+document.getElementById('stat-ont-card')?.addEventListener('click', openOntModal);
+document.getElementById('stat-ont-card')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOntModal(); }
+});
+document.getElementById('ont-modal-close')?.addEventListener('click', closeOntModal);
+document.getElementById('ont-modal-overlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'ont-modal-overlay') closeOntModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeOntModal();
 });
 
 // Start
