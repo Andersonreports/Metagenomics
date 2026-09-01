@@ -365,8 +365,8 @@ body {
 .ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 13%; }
 
 .ont-table th {
-  background: #f8fafc;
-  color: var(--text-main);
+  background: var(--primary);
+  color: white;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -374,6 +374,7 @@ body {
   white-space: nowrap;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
+  border-bottom: none;
 }
 
 .ont-table tbody tr:last-child td {
