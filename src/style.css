@@ -395,9 +395,9 @@ body {
 }
 
 /* Short Read vs Long Read Comparison table (8 columns) */
-.comparison-table th:nth-child(1), .comparison-table td:nth-child(1) { width: 8%; }
-.comparison-table th:nth-child(2), .comparison-table td:nth-child(2) { width: 10%; }
-.comparison-table th:nth-child(3), .comparison-table td:nth-child(3) { width: 10%; }
+.comparison-table th:nth-child(1), .comparison-table td:nth-child(1) { width: 5%; }
+.comparison-table th:nth-child(2), .comparison-table td:nth-child(2) { width: 15%; }
+.comparison-table th:nth-child(3), .comparison-table td:nth-child(3) { width: 8%; }
 .comparison-table th:nth-child(4), .comparison-table td:nth-child(4) { width: 12%; }
 .comparison-table th:nth-child(5), .comparison-table td:nth-child(5) { width: 15%; }
 .comparison-table th:nth-child(6), .comparison-table td:nth-child(6) { width: 15%; }
@@ -419,8 +419,6 @@ body {
 }
 
 .comparison-table td:nth-child(n+4) {
-  text-align: justify;
-  text-align-last: left;
   vertical-align: top;
 }
 

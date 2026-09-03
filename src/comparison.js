@@ -43,7 +43,7 @@ function renderRunGroup(run, rows) {
               <th>Barcode</th>
               <th>Patient</th>
               <th>Sample Type</th>
-              <th>Previous Result (RT-PCR)</th>
+              <th>Previous Result (RT&#8209;PCR)</th>
               <th>ONT EPI2ME (Genus Level)</th>
               <th>Anderson Long Read (Species)</th>
               <th>Anderson Short Read GeneMind (Species)</th>
