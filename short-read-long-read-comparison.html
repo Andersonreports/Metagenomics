@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Short Read vs Long Read Comparison - Anderson Labs</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <div class="header-top">
+        <a href="./tracker.html?type=taxonomy" class="back-btn" title="Back to Taxonomy Projects">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </div>
+      <div class="header-content">
+        <div class="header-titles">
+          <h1>Short Read vs Long Read Comparison</h1>
+          <p>Anderson Diagnostics & Labs Bioinformatics Division</p>
+        </div>
+        <div class="header-meta">
+          <div class="last-loaded" id="last-loaded">Last loaded: --/--/----, --:--</div>
+          <div id="sync-status" class="sync-status"></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats-container">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Samples</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-matching">0</div>
+        <div class="stat-label">Matching</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-mismatching">0</div>
+        <div class="stat-label">Mismatching</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-pending">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="search-wrapper">
+        <input type="text" id="comparison-search" class="search-input" placeholder="Search by patient, barcode, or run..." />
+      </div>
+    </div>
+
+    <section class="ont-table-section" id="comparison-groups">
+      <div class="ont-no-results">Loading samples...</div>
+    </section>
+
+    <script type="module" src="./src/comparison.js"></script>
+  </body>
+</html>

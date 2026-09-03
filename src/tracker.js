@@ -1,4 +1,5 @@
 import { fetchOntValidationRecords } from './ontValidation.js';
+import { fetchComparisonRecords } from './comparisonValidation.js';
 
 // Configurations for different tracker types
 const CONFIGS = {
@@ -217,6 +218,9 @@ async function init() {
   const ontCard = document.getElementById('stat-ont-card');
   if (ontCard) ontCard.style.display = currentType === 'taxonomy' ? '' : 'none';
 
+  const comparisonCard = document.getElementById('stat-comparison-card');
+  if (comparisonCard) comparisonCard.style.display = currentType === 'taxonomy' ? '' : 'none';
+
   await fetchData();
 }
 
@@ -226,6 +230,15 @@ async function fetchOntValidationCount() {
     document.getElementById('stat-ont').textContent = records.length;
   } catch (error) {
     console.error('Error fetching ONT validation count:', error);
+  }
+}
+
+async function fetchComparisonCount() {
+  try {
+    const records = await fetchComparisonRecords();
+    document.getElementById('stat-comparison').textContent = records.length;
+  } catch (error) {
+    console.error('Error fetching comparison count:', error);
   }
 }
 
@@ -240,7 +253,10 @@ async function fetchData() {
     const csvText = await response.text();
     projects = parseCSV(csvText);
     updateUI();
-    if (currentType === 'taxonomy') await fetchOntValidationCount();
+    if (currentType === 'taxonomy') {
+      await fetchOntValidationCount();
+      await fetchComparisonCount();
+    }
     setTimeout(() => {
       syncStatus.textContent = '';
       syncStatus.classList.remove('syncing');
