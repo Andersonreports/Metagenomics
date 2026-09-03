@@ -15,6 +15,7 @@ function updateStats() {
 
 function renderRow(r) {
   const { label, cls } = classifyRemark(r.remark);
+  const remarkNote = r.remark && r.remark.trim().toLowerCase() !== label.toLowerCase() ? r.remark : '';
   return `
     <tr>
       <td>${escapeHtml(r.barcode)}</td>
@@ -26,7 +27,7 @@ function renderRow(r) {
       <td>${escapeHtml(r.shortReadResult) || '—'}</td>
       <td>
         <span class="remark-tag ${cls}">${escapeHtml(label)}</span>
-        ${r.remark ? `<div class="remark-detail">${escapeHtml(r.remark)}</div>` : ''}
+        ${remarkNote ? `<div class="remark-detail">${escapeHtml(remarkNote)}</div>` : ''}
       </td>
     </tr>
   `;

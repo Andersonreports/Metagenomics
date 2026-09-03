@@ -354,23 +354,19 @@ body {
   text-align-last: left;
 }
 
-.ont-table th:nth-child(1), .ont-table td:nth-child(1) { width: 8%; }
-.ont-table th:nth-child(2), .ont-table td:nth-child(2) { width: 10%; }
+.ont-table th:nth-child(1), .ont-table td:nth-child(1) { width: 6.5%; }
+.ont-table th:nth-child(2), .ont-table td:nth-child(2) { width: 14%; }
 .ont-table th:nth-child(3), .ont-table td:nth-child(3) { width: 9%; }
 .ont-table th:nth-child(4), .ont-table td:nth-child(4) { width: 9%; }
-.ont-table th:nth-child(5), .ont-table td:nth-child(5) { width: 8%; }
+.ont-table th:nth-child(5), .ont-table td:nth-child(5) { width: 6.5%; }
 .ont-table th:nth-child(6), .ont-table td:nth-child(6) { width: 14%; }
 .ont-table th:nth-child(7), .ont-table td:nth-child(7) { width: 14%; }
 .ont-table th:nth-child(8), .ont-table td:nth-child(8) { width: 15%; }
-.ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 13%; }
+.ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 12%; }
 
-.ont-table th:nth-child(-n+5),
-.ont-table td:nth-child(-n+5) {
-  text-align: center;
-}
-
-.ont-table td:nth-child(-n+5) {
-  vertical-align: middle;
+.ont-table th:nth-child(-n+9),
+.ont-table td:nth-child(-n+9) {
+  text-align: left;
 }
 
 .ont-table th {
@@ -395,30 +391,21 @@ body {
 }
 
 /* Short Read vs Long Read Comparison table (8 columns) */
-.comparison-table th:nth-child(1), .comparison-table td:nth-child(1) { width: 5%; }
+.comparison-table th:nth-child(1), .comparison-table td:nth-child(1) { width: 7%; }
 .comparison-table th:nth-child(2), .comparison-table td:nth-child(2) { width: 15%; }
 .comparison-table th:nth-child(3), .comparison-table td:nth-child(3) { width: 8%; }
 .comparison-table th:nth-child(4), .comparison-table td:nth-child(4) { width: 12%; }
 .comparison-table th:nth-child(5), .comparison-table td:nth-child(5) { width: 15%; }
 .comparison-table th:nth-child(6), .comparison-table td:nth-child(6) { width: 15%; }
 .comparison-table th:nth-child(7), .comparison-table td:nth-child(7) { width: 15%; }
-.comparison-table th:nth-child(8), .comparison-table td:nth-child(8) { width: 15%; }
+.comparison-table th:nth-child(8), .comparison-table td:nth-child(8) { width: 13%; }
 
-.comparison-table th:nth-child(-n+3),
-.comparison-table td:nth-child(-n+3) {
-  text-align: center;
-}
-
-.comparison-table td:nth-child(-n+3) {
-  vertical-align: top;
-}
-
-.comparison-table th:nth-child(n+4),
-.comparison-table td:nth-child(n+4) {
+.comparison-table th:nth-child(-n+8),
+.comparison-table td:nth-child(-n+8) {
   text-align: left;
 }
 
-.comparison-table td:nth-child(n+4) {
+.comparison-table td:nth-child(-n+8) {
   vertical-align: top;
 }
 
