@@ -79,6 +79,7 @@ export function parseOntValidationRecords(csvText) {
         barcode: get('barcode'),
         patientName: get('patientName'),
         billedFor: get('billedFor'),
+        hasBilledFor: colMap.billedFor !== undefined,
         sampleType: get('sampleType'),
         method: get('method'),
         previousResult: get('previousResult'),

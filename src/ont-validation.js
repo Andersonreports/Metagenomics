@@ -13,14 +13,14 @@ function updateStats() {
     records.filter(r => classifyRemark(r.remark).cls === 'remark-pending').length;
 }
 
-function renderRow(r) {
+function renderRow(r, hasBilledFor) {
   const { label, cls } = classifyRemark(r.remark);
   const remarkNote = r.remark && r.remark.trim().toLowerCase() !== label.toLowerCase() ? r.remark : '';
   return `
     <tr>
       <td>${escapeHtml(r.barcode)}</td>
       <td>${escapeHtml(r.patientName)}</td>
-      <td>${escapeHtml(r.billedFor) || '—'}</td>
+      ${hasBilledFor ? `<td>${escapeHtml(r.billedFor) || '—'}</td>` : ''}
       <td>${escapeHtml(r.sampleType) || '—'}</td>
       <td>${escapeHtml(r.method) || '—'}</td>
       <td>${escapeHtml(r.previousResult) || '—'}</td>
@@ -35,16 +35,17 @@ function renderRow(r) {
 }
 
 function renderRunGroup(run, rows) {
+  const hasBilledFor = rows.some(r => r.hasBilledFor);
   return `
     <div class="ont-run-group">
       <h2 class="ont-run-title">${escapeHtml(run) || 'Unlabeled Run'}</h2>
       <div class="table-wrapper">
-        <table class="ont-table">
+        <table class="ont-table${hasBilledFor ? '' : ' ont-table-8col'}">
           <thead>
             <tr>
               <th>Barcode</th>
               <th>Patient</th>
-              <th>Test Billed For</th>
+              ${hasBilledFor ? '<th>Test Billed For</th>' : ''}
               <th>Sample Type</th>
               <th>Method</th>
               <th>Previous Result</th>
@@ -53,7 +54,7 @@ function renderRunGroup(run, rows) {
               <th>Remark</th>
             </tr>
           </thead>
-          <tbody>${rows.map(renderRow).join('')}</tbody>
+          <tbody>${rows.map(r => renderRow(r, hasBilledFor)).join('')}</tbody>
         </table>
       </div>
     </div>

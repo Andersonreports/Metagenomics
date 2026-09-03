@@ -364,6 +364,16 @@ body {
 .ont-table th:nth-child(8), .ont-table td:nth-child(8) { width: 15%; }
 .ont-table th:nth-child(9), .ont-table td:nth-child(9) { width: 12%; }
 
+/* Runs whose sheet section has no "Test Billed For" column (8 columns) */
+.ont-table-8col th:nth-child(1), .ont-table-8col td:nth-child(1) { width: 7%; }
+.ont-table-8col th:nth-child(2), .ont-table-8col td:nth-child(2) { width: 15%; }
+.ont-table-8col th:nth-child(3), .ont-table-8col td:nth-child(3) { width: 10%; }
+.ont-table-8col th:nth-child(4), .ont-table-8col td:nth-child(4) { width: 8%; }
+.ont-table-8col th:nth-child(5), .ont-table-8col td:nth-child(5) { width: 15%; }
+.ont-table-8col th:nth-child(6), .ont-table-8col td:nth-child(6) { width: 15%; }
+.ont-table-8col th:nth-child(7), .ont-table-8col td:nth-child(7) { width: 17%; }
+.ont-table-8col th:nth-child(8), .ont-table-8col td:nth-child(8) { width: 13%; }
+
 .ont-table th:nth-child(-n+9),
 .ont-table td:nth-child(-n+9) {
   text-align: left;
