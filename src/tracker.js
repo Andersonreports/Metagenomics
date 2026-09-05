@@ -207,7 +207,7 @@ async function init() {
     currentType = 'taxonomy';
   }
 
-  document.title = `${CONFIGS[currentType].title} - Anderson Labs`;
+  document.title = `${CONFIGS[currentType].title} - Clinical Metagenomics`;
   document.querySelector('.header-titles h1').textContent = CONFIGS[currentType].title;
 
   const backBtn = document.querySelector('.back-btn');
